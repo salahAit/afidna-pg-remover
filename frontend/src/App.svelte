@@ -43,14 +43,14 @@
       });
 
       if (!response.ok) {
-        throw new Error('Failed to process image');
+        throw new Error('فشل في معالجة الصورة');
       }
 
       const blob = await response.blob();
       processedImage = URL.createObjectURL(blob);
     } catch (err) {
       console.error(err);
-      error = "Error processing image. Make sure the backend is running.";
+      error = "حدث خطأ أثناء معالجة الصورة. تأكد من تشغيل الخادم.";
     } finally {
       loading = false;
     }
@@ -75,7 +75,10 @@
 </script>
 
 <main>
-  <h1>Background Remover</h1>
+  <div class="header">
+    <img src="/hadif-logo.webp" alt="أفيدنا" class="logo" />
+    <h1>مزيل الخلفية</h1>
+  </div>
   
   <div class="container">
     <!-- Input Section -->
@@ -84,13 +87,13 @@
       ondrop={handleDrop}
       ondragover={handleDragOver}
       role="region"
-      aria-label="File Upload Drop Zone"
+      aria-label="منطقة سحب وإفلات الملفات"
     >
       {#if !originalImage}
         <div class="placeholder">
-          <p>Drag & Drop an image here</p>
-          <p>or</p>
-          <button onclick={() => fileInput.click()}>Select File</button>
+          <p>اسحب وأفلت الصورة هنا</p>
+          <p>أو</p>
+          <button onclick={() => fileInput.click()}>اختر ملفاً</button>
           <input 
             type="file" 
             accept="image/*" 
@@ -101,9 +104,9 @@
         </div>
       {:else}
         <div class="image-preview">
-          <h3>Original</h3>
-          <img src={originalImage} alt="Original" />
-          <button class="secondary" onclick={reset}>Upload Different Image</button>
+          <h3>الأصلية</h3>
+          <img src={originalImage} alt="الأصلية" />
+          <button class="secondary" onclick={reset}>رفع صورة أخرى</button>
         </div>
       {/if}
     </div>
@@ -113,24 +116,24 @@
       {#if loading}
         <div class="loading">
           <div class="spinner"></div>
-          <p>Removing background...</p>
+          <p>جاري إزالة الخلفية...</p>
         </div>
       {:else if processedImage}
         <div class="image-preview">
-          <h3>Result</h3>
+          <h3>النتيجة</h3>
           <div class="checkerboard">
-            <img src={processedImage} alt="Processed" />
+            <img src={processedImage} alt="النتيجة" />
           </div>
-          <button onclick={downloadImage}>Download PNG</button>
+          <button onclick={downloadImage}>تحميل الصورة (PNG)</button>
         </div>
       {:else if error}
         <div class="error">
           <p>{error}</p>
-          <button onclick={() => processFile(fileInput.files[0])}>Try Again</button>
+          <button onclick={() => processFile(fileInput.files[0])}>حاول مرة أخرى</button>
         </div>
       {:else}
         <div class="placeholder empty-state">
-          <p>Processed image will appear here</p>
+          <p>ستظهر الصورة المعالجة هنا</p>
         </div>
       {/if}
     </div>
@@ -142,12 +145,25 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .logo {
+    max-height: 80px;
+    object-fit: contain;
   }
 
   h1 {
-    text-align: center;
-    margin-bottom: 2rem;
+    margin: 0;
   }
 
   .container {
@@ -192,7 +208,7 @@
     gap: 1rem;
   }
 
-  img {
+  .image-preview img {
     max-width: 100%;
     max-height: 400px;
     object-fit: contain;
@@ -243,10 +259,23 @@
   button {
     background-color: #646cff;
     color: white;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
   }
 
   button:hover {
     background-color: #535bf2;
+  }
+
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
   }
 
   button.secondary {
