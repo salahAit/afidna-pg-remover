@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.venv
+
+# Javascript / Node
+node_modules/
+dist/
+.DS_Store
+coverage/
+.npm/
+
+# IDEs
+.vscode/
+.idea/
+
+# Project specific
+output.png
+input.jpg
