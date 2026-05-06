@@ -70,7 +70,6 @@
     originalImage = null;
     processedImage = null;
     error = null;
-    if (fileInput) fileInput.value = '';
   }
 </script>
 
@@ -93,11 +92,13 @@
         <div class="placeholder">
           <p>اسحب وأفلت الصورة هنا</p>
           <p>أو</p>
-          <button onclick={() => fileInput.click()}>اختر ملفاً</button>
+          <button type="button" onclick={() => fileInput.click()}>
+            اختر ملفاً
+          </button>
           <input 
             type="file" 
             accept="image/*" 
-            bind:this={fileInput} 
+            bind:this={fileInput}
             onchange={handleFileSelect} 
             hidden 
           />
@@ -106,7 +107,7 @@
         <div class="image-preview">
           <h3>الأصلية</h3>
           <img src={originalImage} alt="الأصلية" />
-          <button class="secondary" onclick={reset}>رفع صورة أخرى</button>
+          <button class="secondary" onclick={() => reset()}>رفع صورة أخرى</button>
         </div>
       {/if}
     </div>
@@ -124,7 +125,7 @@
           <div class="checkerboard">
             <img src={processedImage} alt="النتيجة" />
           </div>
-          <button onclick={downloadImage}>تحميل الصورة (PNG)</button>
+          <button onclick={() => downloadImage()}>تحميل الصورة (PNG)</button>
         </div>
       {:else if error}
         <div class="error">
@@ -189,6 +190,10 @@
     align-items: center;
     justify-content: center;
     border: 2px dashed #444;
+  }
+
+  .upload-zone {
+    cursor: default;
   }
 
   .upload-zone:hover {
@@ -266,7 +271,8 @@
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
-    transition: border-color 0.25s;
+    transition: background-color 0.25s;
+    z-index: 10;
   }
 
   button:hover {

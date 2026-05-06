@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
-from rembg import remove
+from rembg import remove, new_session
 import uvicorn
 import io
 
@@ -16,10 +16,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize a high-accuracy session (BiRefNet)
+# This uses the GPU via CUDAExecutionProvider as confirmed by the environment setup
+session = new_session("birefnet-general")
+
 @app.post("/remove")
 async def remove_background(file: UploadFile = File(...)):
     contents = await file.read()
-    output_image = remove(contents)
+    # Use the pre-initialized high-accuracy session
+    output_image = remove(contents, session=session)
     return Response(content=output_image, media_type="image/png")
 
 if __name__ == "__main__":
